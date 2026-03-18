@@ -39,3 +39,11 @@ interface Instance {
 declare function pairs<T extends object>(
 	object: T
 ): IterableFunction<LuaTuple<[keyof T, Exclude<T[keyof T], undefined>]>>;
+
+interface SharedUILabsAPI {
+	listStories: () => Array<{ name: string; path: string; module: ModuleScript }>;
+	mountStory: (name: string) => Frame | undefined;
+	unmountStory: (name: string) => boolean;
+	getStoryHolder: (name: string) => Frame | undefined;
+	getMountedStories: () => Array<{ name: string; key: string; holder: Frame | undefined }>;
+}

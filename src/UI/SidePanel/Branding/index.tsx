@@ -63,7 +63,7 @@ function Branding(props: BrandingProps) {
 				<Text
 					key={"Version"}
 					TextColor3={theme.Text.Disabled}
-					Text={`v${Configs.Version.Mayor}.${Configs.Version.Minor}.${Configs.Version.Fix}`}
+					Text={`v${Configs.Version.Mayor}.${Configs.Version.Minor}.${Configs.Version.Fix}${Configs.Version.ForkSuffix ?? ""}`}
 					TextSize={10}
 					AutomaticSize={Enum.AutomaticSize.X}
 					Visible={!isCanary}

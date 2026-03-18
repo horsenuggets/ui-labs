@@ -35,7 +35,7 @@ function Branding(setprops: BrandingProps) {
 			/>
 			<Text
 				key="VersionIndex"
-				Text={`v${version.Mayor}.${version.Minor}.${version.Fix}`}
+				Text={`v${version.Mayor}.${version.Minor}.${version.Fix}${version.ForkSuffix ?? ""}`}
 				TextSize={10}
 				Weight="Light"
 				TextColor3={theme.Text.Disabled}

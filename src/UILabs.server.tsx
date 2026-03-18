@@ -4,12 +4,15 @@ import React from "@rbxts/react";
 import { ReflexProvider } from "@rbxts/react-reflex";
 import { Root, createLegacyRoot, createPortal } from "@rbxts/react-roblox";
 import { RunService } from "@rbxts/services";
+import { registerSharedAPI, unregisterSharedAPI } from "API/SharedAPI";
 import { RootProducer } from "Reflex";
 import Plugin from "UI/Plugin";
 import { Div } from "UI/Styles/Div";
 import { IsCanaryPlugin, IsLocalPlugin } from "Utils/MiscUtils";
 
 if (!RunService.IsRunning() || RunService.IsEdit()) {
+	registerSharedAPI();
+
 	const isLocal = IsLocalPlugin(plugin);
 	const isCanary = IsCanaryPlugin(plugin);
 
@@ -74,6 +77,7 @@ if (!RunService.IsRunning() || RunService.IsEdit()) {
 	onDockWidgetToggled();
 
 	plugin.Unloading.Connect(() => {
+		unregisterSharedAPI();
 		if (pluginRoot) {
 			pluginRoot.unmount();
 		}

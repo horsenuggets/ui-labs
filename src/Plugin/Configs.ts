@@ -25,6 +25,7 @@ const Configs = {
 		Mayor: 1,
 		Minor: 5,
 		Fix: 0,
+		ForkSuffix: "-horse.0.1",
 		CanaryCommit: "f2a496b"
 	},
 
