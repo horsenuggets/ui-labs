@@ -46,4 +46,5 @@ interface SharedUILabsAPI {
 	unmountStory: (name: string) => boolean;
 	getStoryHolder: (name: string) => Frame | undefined;
 	getMountedStories: () => Array<{ name: string; key: string; holder: Frame | undefined }>;
+	renderStory: (name: string, width?: number, height?: number) => ScreenGui | undefined;
 }
