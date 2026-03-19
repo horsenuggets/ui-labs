@@ -5,6 +5,7 @@ import { useCanvasHeight } from "Context/StoryPanelContext.js";
 import { useMouseOffset } from "Hooks/Context/UserInput.js";
 import { useToggler } from "Hooks/Utils/Toggler";
 import { useTween } from "Hooks/Utils/Tween";
+import { selectPanelDragging } from "Reflex/Interface";
 import { selectPopup } from "Reflex/Overlay.js";
 import ToolbarDropdown from "UI/Overlays/Dropdown/Toolbar/ToolbarDropdown.js";
 import { Detector } from "UI/Styles/Detector";
@@ -28,10 +29,11 @@ function LeftToolbar(props: LeftToolbarProps) {
 	const [canvasHeight] = useCanvasHeight();
 
 	const overlay = useSelector(selectPopup);
+	const panelDragging = useSelector(selectPanelDragging);
 	const mouseOffset = useMouseOffset();
 
 	const isBlocked = overlay && overlay.Identifier === "ButtonDropdown";
-	const isShowing = isBlocked || hovered;
+	const isShowing = (isBlocked || hovered) && !panelDragging;
 
 	useEffect(() => {
 		tweenHoverAlpha(isShowing ? 1 : 0);

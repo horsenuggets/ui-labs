@@ -12,6 +12,7 @@ interface InterfaceState {
 	selectTool: boolean;
 	showOutlines: boolean;
 	mouseRules: boolean;
+	panelDragging: boolean;
 	storyLock: Set<string>;
 }
 
@@ -26,6 +27,7 @@ const initialState: InterfaceState = {
 	selectTool: false,
 	showOutlines: false,
 	mouseRules: false,
+	panelDragging: false,
 	storyLock: new Set()
 };
 
@@ -39,6 +41,7 @@ export const selectMeasureTool = (state: RootState) => state.interface.measureTo
 export const selectSelectTool = (state: RootState) => state.interface.selectTool;
 export const selectShowOutlines = (state: RootState) => state.interface.showOutlines;
 export const selectMouseRules = (state: RootState) => state.interface.mouseRules;
+export const selectPanelDragging = (state: RootState) => state.interface.panelDragging;
 export const selectStoryLock = (state: RootState) => state.interface.storyLock;
 
 export const InterfaceProducer = createProducer(initialState, {
@@ -72,6 +75,9 @@ export const InterfaceProducer = createProducer(initialState, {
 	},
 	setMouseRules: (state, active: boolean) => {
 		return { ...state, mouseRules: active };
+	},
+	setPanelDragging: (state, active: boolean) => {
+		return { ...state, panelDragging: active };
 	},
 	lockStoryFrame: (state, locker: string) => {
 		if (state.storyLock.has(locker)) return state;

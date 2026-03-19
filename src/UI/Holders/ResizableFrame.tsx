@@ -1,6 +1,7 @@
 import { Signal } from "@rbxts/lemon-signal";
 import { useBindingListener } from "@rbxts/pretty-react-hooks";
 import React, { PropsWithChildren, useBinding, useEffect, useRef, useState } from "@rbxts/react";
+import { useProducer } from "@rbxts/react-reflex";
 import { RunService } from "@rbxts/services";
 import { useConnection } from "Hooks/Utils/Connection";
 import { Detector } from "UI/Styles/Detector";
@@ -38,6 +39,7 @@ function ResizableFrame(setprops: ResizableFrameProps) {
 	const props = setProps(setprops);
 
 	const frameRef = useRef<Frame>();
+	const { setPanelDragging } = useProducer<RootProducer>();
 
 	const [collapsed, setCollapsed] = useState(false);
 	const [isDragging, setIsDragging] = useState(false);
@@ -68,6 +70,10 @@ function ResizableFrame(setprops: ResizableFrameProps) {
 			}
 		}
 	});
+
+	useEffect(() => {
+		setPanelDragging(isDragging);
+	}, [isDragging]);
 
 	useEffect(() => {
 		if (!collapsed) {
