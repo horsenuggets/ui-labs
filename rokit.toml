@@ -4,4 +4,4 @@
 # New tools can be added by running `rokit add <tool>` in a terminal.
 
 [tools]
-rojo = "horsenuggets/rojo@7.7.0-rc.1-horse.0.3"
+rojo = "horsenuggets/rojo@7.7.0-rc.1-horse.0.4"
