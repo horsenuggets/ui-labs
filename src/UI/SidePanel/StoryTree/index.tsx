@@ -1,8 +1,12 @@
-import React, { useMemo } from "@rbxts/react";
-import { useSelector } from "@rbxts/react-reflex";
+import React, { useCallback, useEffect, useMemo } from "@rbxts/react";
+import { useProducer, useSelector, useSelectorCreator } from "@rbxts/react-reflex";
+import { useInputBegan } from "Hooks/Context/UserInput";
+import Configs from "Plugin/Configs";
 import { selectFilter } from "Reflex/Explorer/Filter";
 import { selectNodes } from "Reflex/Explorer/Nodes";
 import { selectPopup } from "Reflex/Overlay";
+import { selectKeepViewOnViewport, selectShortcutsEnabled } from "Reflex/PluginSettings";
+import { selectPreview } from "Reflex/StoryPreview";
 import { Detector } from "UI/Styles/Detector";
 import { Div } from "UI/Styles/Div";
 import TopList from "UI/Styles/List/TopList";
@@ -10,6 +14,7 @@ import Divisor from "UI/Utils/Divisor";
 
 import Storybook from "../Nodes/ChildrenHolder/Storybook";
 import UnknownNode from "../Nodes/ChildrenHolder/UnknownNode";
+import { FlattenStories } from "./FlattenStories";
 import { FilterNodes } from "./SearchFilter";
 
 interface StoryTreeProps {}
@@ -20,8 +25,67 @@ function StoryTree(props: StoryTreeProps) {
 	const overlay = useSelector(selectPopup);
 	const isBlocked = overlay !== undefined;
 
+	const inputBegan = useInputBegan();
+	const shortcutsEnabled = useSelector(selectShortcutsEnabled);
+	const keepViewOnViewport = useSelector(selectKeepViewOnViewport);
+	const rootStory = useSelectorCreator(selectPreview, Configs.RootPreviewKey);
+	const { mountStory } = useProducer<RootProducer>();
+
+	const filteredNodes = useMemo(() => {
+		return filter === undefined ? nodes : FilterNodes(nodes, filter);
+	}, [nodes, filter]);
+
+	const flatStories = useMemo(() => {
+		return FlattenStories(filteredNodes);
+	}, [filteredNodes]);
+
+	const MoveToStory = useCallback(
+		(delta: number) => {
+			if (flatStories.size() === 0) return;
+
+			const currentModule = rootStory?.Module;
+			let currentIndex = -1;
+
+			if (currentModule) {
+				for (let i = 0; i < flatStories.size(); i++) {
+					if (flatStories[i].Module === currentModule) {
+						currentIndex = i;
+						break;
+					}
+				}
+			}
+
+			let nextIndex: number;
+			if (currentIndex === -1) {
+				nextIndex = delta > 0 ? 0 : flatStories.size() - 1;
+			} else {
+				nextIndex = math.clamp(currentIndex + delta, 0, flatStories.size() - 1);
+				if (nextIndex === currentIndex) return;
+			}
+
+			mountStory(flatStories[nextIndex].Module, keepViewOnViewport);
+		},
+		[flatStories, rootStory, keepViewOnViewport]
+	);
+
+	useEffect(() => {
+		if (!shortcutsEnabled) return;
+
+		const connection = inputBegan.Connect((input) => {
+			if (!input.IsModifierKeyDown(Enum.ModifierKey.Alt)) return;
+			if (input.KeyCode === Enum.KeyCode.Up) {
+				MoveToStory(-1);
+			} else if (input.KeyCode === Enum.KeyCode.Down) {
+				MoveToStory(1);
+			}
+		});
+
+		return () => {
+			connection.Disconnect();
+		};
+	}, [MoveToStory, shortcutsEnabled]);
+
 	const nodeList = useMemo(() => {
-		const filteredNodes = filter === undefined ? nodes : FilterNodes(nodes, filter);
 		const elementsList: React.Element[] = [];
 		const booksSize = filteredNodes.storybooks.size();
 		const unknownSize = filteredNodes.unknown.size();
@@ -42,7 +106,7 @@ function StoryTree(props: StoryTreeProps) {
 			elementsList.push(<UnknownNode Order={booksSize + 1} UnknownNodes={filteredNodes.unknown} />);
 		}
 		return elementsList;
-	}, [nodes, filter]);
+	}, [filteredNodes]);
 
 	return (
 		<Detector key="ScrollerFrame" Size={new UDim2(1, 0, 1, 0)} AnchorPoint={new Vector2(0.5, 0)} LayoutOrder={3}>
