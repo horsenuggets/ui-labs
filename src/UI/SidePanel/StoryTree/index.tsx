@@ -59,7 +59,13 @@ function StoryTree(props: StoryTreeProps) {
 			if (currentIndex === -1) {
 				nextIndex = delta > 0 ? 0 : flatStories.size() - 1;
 			} else {
-				nextIndex = math.clamp(currentIndex + delta, 0, flatStories.size() - 1);
+				const lastIndex = flatStories.size() - 1;
+				nextIndex = currentIndex + delta;
+				if (nextIndex > lastIndex) {
+					nextIndex = 0;
+				} else if (nextIndex < 0) {
+					nextIndex = lastIndex;
+				}
 				if (nextIndex === currentIndex) return;
 			}
 
