@@ -28,6 +28,7 @@ defaults:
 jobs:
     # Build job
     build:
+        if: ${{ !github.event.repository.fork }}
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
