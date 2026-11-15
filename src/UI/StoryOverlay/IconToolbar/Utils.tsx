@@ -1,5 +1,4 @@
-import React, { useMemo } from "@rbxts/react";
-import { useCallback } from "@rbxts/react";
+import React, { useCallback, useMemo } from "@rbxts/react";
 import { useProducer } from "@rbxts/react-reflex";
 import { ToolsButtonActive, useToolsContext } from "Context/ToolsContext";
 import { useMouseOffset } from "Hooks/Context/UserInput";
@@ -43,7 +42,7 @@ export function useButtonElements(PreviewEntry: PreviewEntry) {
 	const buttonsActive = context.ToolButtonsActive;
 
 	const buttonElements = useMemo(() => {
-		const elements = new Map<string, JSX.Element>();
+		const elements = new Map<string, React.Element>();
 		const total = GetTotalButtons(buttonsActive);
 
 		if (total <= 0) {

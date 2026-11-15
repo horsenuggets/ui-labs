@@ -1,3 +1,5 @@
+import React from "@rbxts/react";
+
 import Explorer from "./Buttons.tsx/Explorer";
 import FullscreenMode from "./Buttons.tsx/FullscreenMode";
 import LightBackground from "./Buttons.tsx/LightBackground";
@@ -24,7 +26,7 @@ export interface ToolButtonProps {
 interface ButtonListEntry {
 	Name: ToolButtonType;
 	DisplayName: string;
-	Render: (props: ToolButtonProps) => JSX.Element;
+	Render: (props: ToolButtonProps) => React.Element;
 }
 
 export const ToolButtonsList = [

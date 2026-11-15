@@ -23,10 +23,10 @@ const Configs = {
 
 	Version: {
 		Mayor: 1,
-		Minor: 5,
-		Fix: 0,
-		ForkSuffix: "-horse.0.3",
-		CanaryCommit: "f2a496b"
+		Minor: 6,
+		Fix: 1,
+		ForkSuffix: "-horse.0.4",
+		CanaryCommit: "2fd2a11"
 	},
 
 	Extensions: {

@@ -16,7 +16,7 @@ import Sprite from "UI/Utils/Sprite";
 
 interface ChildrenHolderProps extends PropsWithChildren {
 	Name: string | Instance;
-	Order: number;
+	Prefix?: string;
 	IsChild?: boolean;
 	Sprite: SpriteName;
 	SpriteColor: Color3;
@@ -68,7 +68,7 @@ function ChildrenHolder(setprops: ChildrenHolderProps) {
 	}, [filter]);
 
 	return (
-		<Div key={name} Size={UDim2.fromScale(1, 0)} AutomaticSize={Enum.AutomaticSize.Y} LayoutOrder={props.Order}>
+		<Div key={`${props.Prefix ?? ""}-${name}`} Size={UDim2.fromScale(1, 0)} AutomaticSize={Enum.AutomaticSize.Y}>
 			<TopList Padding={new UDim(0, 1)} />
 			<frame
 				key={"Title"}
@@ -130,7 +130,7 @@ function ChildrenHolder(setprops: ChildrenHolderProps) {
 			>
 				<Divisor Direction="Y" Position={new UDim2(0, 9, 0, 0)} Size={new UDim(1, -13)} Anchor={0} Transparency={0.8} />
 				<Div key={"Children"} Size={UDim2.fromScale(1, 0)} LayoutOrder={2} AutomaticSize={Enum.AutomaticSize.Y}>
-					<TopList Padding={new UDim(0, 1)} />
+					<TopList SortOrder={Enum.SortOrder.Name} Padding={new UDim(0, 1)} />
 					<Padding Left={16} />
 					{expanded ? props.Children : []}
 				</Div>
