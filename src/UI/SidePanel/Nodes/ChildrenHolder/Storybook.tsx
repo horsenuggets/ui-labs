@@ -27,6 +27,7 @@ function Storybook(props: StorybookProps) {
 	return (
 		<ChildrenHolder
 			Name={props.Node.Name}
+			Order={props.Order}
 			Prefix="1"
 			Sprite={"BookIcon"}
 			IsChild={false}
