@@ -19,12 +19,17 @@ function CHECK_OBJECT_CONTROL(control: Record<string, unknown>): "valid" | Story
 
 	if (control.EntryType === "Control") {
 		if (!("Type" in control)) return { Sucess: false, Error: "Malformed control object" };
-		if (!("ControlValue" in control)) return { Sucess: false, Error: "Malformed control object" };
+		if (control.Type !== "Object" && !("ControlValue" in control)) {
+			return { Sucess: false, Error: "Malformed control object" };
+		}
 		if (!((control.Type as string) in AllControlsMap)) {
 			return { Sucess: false, Error: `Unknown control kind "${control.Type}", you might need to update UI Labs"` };
 		}
 	} else if (control.EntryType === "ControlGroup") {
-		if (!("Controls" in control)) return { Sucess: false, Error: "Malformed control group" };
+		if (!("Controls" in control) || !typeIs(control.Controls, "table")) {
+			return { Sucess: false, Error: "Malformed control group" };
+		}
+		return CHECK_CONTROL_LIST(control.Controls);
 	} else {
 		return { Sucess: false, Error: "Malformed control object" };
 	}
