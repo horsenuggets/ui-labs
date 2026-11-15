@@ -1,0 +1,94 @@
+name: Main / CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Plugin version to publish, without a v prefix.
+        required: true
+        type: string
+      notes:
+        description: Release notes in Markdown.
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-release
+  cancel-in-progress: false
+
+jobs:
+  build-release:
+    name: build-release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Require the main branch
+        env:
+          RELEASE_NOTES: ${{ inputs.notes }}
+        run: |
+          if [[ "$GITHUB_REF" != "refs/heads/main" || -z "$RELEASE_NOTES" ]]; then
+            echo "Releases require the main branch and explicit release notes." >&2
+            exit 1
+          fi
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          submodules: recursive
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+      - name: Set up pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Validate the release version
+        id: version
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: node scripts/release-version.mjs "$RELEASE_VERSION" >> "$GITHUB_OUTPUT"
+      - name: Check release formatting
+        run: pnpm exec prettier --check .github/workflows/main.cd.yml scripts/release-version.mjs tests/ReleaseVersion.test.mjs
+      - name: Run regression tests
+        run: pnpm test
+      - name: Lint source
+        run: pnpm run lint
+      - name: Set up declared Roblox tools
+        uses: CompeyDev/setup-rokit@1d9390883f7ebce19d48f5b8d006e11d387c92ab # v0.2.1
+        with:
+          version: v1.2.0
+      - name: Build the plugin
+        run: pnpm run build:rbxm
+      - name: Upload the plugin artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ui-labs-plugin
+          path: ui-labs.rbxm
+          if-no-files-found: error
+
+  publish-release:
+    name: publish-release
+    needs: build-release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download the validated plugin
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: ui-labs-plugin
+      - name: Publish the release
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_NOTES: ${{ inputs.notes }}
+          RELEASE_VERSION: ${{ needs.build-release.outputs.version }}
+        run: |
+          gh release create "$RELEASE_VERSION" ui-labs.rbxm \
+            --draft --prerelease=false --target "$GITHUB_SHA" \
+            --title "$RELEASE_VERSION" --notes "$RELEASE_NOTES"
+          gh release edit "$RELEASE_VERSION" --draft=false --prerelease=false --latest
