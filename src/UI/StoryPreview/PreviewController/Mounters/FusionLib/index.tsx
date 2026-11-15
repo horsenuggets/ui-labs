@@ -70,10 +70,11 @@ function FusionLib(props: MounterProps<"FusionLib">) {
 				return value;
 			} else {
 				if (version === "Fusion3") {
-					const scope = Cast<Fusion3>(fusion);
-					scope.Hydrate(props.MountFrame)({
+					const hydrateScope = Cast<Fusion3>(GetScopedFusion(Cast<Fusion3>(result.fusion), []));
+					hydrateScope.Hydrate(props.MountFrame)({
 						[fusion.Children]: value
 					});
+					table.clear(hydrateScope);
 				} else {
 					fusion.Hydrate(props.MountFrame)({
 						[fusion.Children]: value

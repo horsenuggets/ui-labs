@@ -22,6 +22,7 @@ function UnknownNode(props: UnknownNodeProps) {
 	return (
 		<ChildrenHolder
 			Order={props.Order}
+			Prefix="3"
 			Name={"Unknown Stories"}
 			Sprite={"UnknownIcon"}
 			SpriteColor={theme.Text.Color}

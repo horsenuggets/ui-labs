@@ -6,10 +6,10 @@ settings:
 
 patchedDependencies:
   '@rbxts/roact':
-    hash: 9ea9030884566c0404be4d6ceb3176ef0bca41d63829793e6f5caf689702f452
+    hash: ojbila7yhaoxjr2ppisuj47sbq
     path: patches/@rbxts__roact.patch
   '@rbxts/vide':
-    hash: 65882dc11ae33cf1b55ba8e911ac99dc291501d371dad65243837e40baa280c1
+    hash: 5fsmppbm65opnthddjapkh6g6q
     path: patches/@rbxts__vide.patch
 
 importers:
@@ -78,7 +78,7 @@ importers:
         version: 2.4.2
       '@rbxts/vide':
         specifier: ^0.4.5
-        version: 0.4.6(patch_hash=65882dc11ae33cf1b55ba8e911ac99dc291501d371dad65243837e40baa280c1)
+        version: 0.4.6(patch_hash=5fsmppbm65opnthddjapkh6g6q)
     devDependencies:
       '@eslint/compat':
         specifier: ^2.0.1
@@ -97,7 +97,7 @@ importers:
         version: 0.2.0
       '@rbxts/roact':
         specifier: ^1.4.4-ts.0
-        version: 1.4.4-ts.0(patch_hash=9ea9030884566c0404be4d6ceb3176ef0bca41d63829793e6f5caf689702f452)
+        version: 1.4.4-ts.0(patch_hash=ojbila7yhaoxjr2ppisuj47sbq)
       '@rbxts/types':
         specifier: '=1.0.758'
         version: 1.0.758
@@ -1568,7 +1568,7 @@ snapshots:
 
   '@rbxts/ripple@0.9.3': {}
 
-  '@rbxts/roact@1.4.4-ts.0(patch_hash=9ea9030884566c0404be4d6ceb3176ef0bca41d63829793e6f5caf689702f452)': {}
+  '@rbxts/roact@1.4.4-ts.0(patch_hash=ojbila7yhaoxjr2ppisuj47sbq)': {}
 
   '@rbxts/services@1.6.0': {}
 
@@ -1584,7 +1584,7 @@ snapshots:
 
   '@rbxts/ui-labs@2.4.2': {}
 
-  '@rbxts/vide@0.4.6(patch_hash=65882dc11ae33cf1b55ba8e911ac99dc291501d371dad65243837e40baa280c1)': {}
+  '@rbxts/vide@0.4.6(patch_hash=5fsmppbm65opnthddjapkh6g6q)': {}
 
   '@roblox-ts/luau-ast@2.0.0': {}
 

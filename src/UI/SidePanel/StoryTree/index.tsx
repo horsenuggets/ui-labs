@@ -35,12 +35,9 @@ function StoryTree(props: StoryTreeProps) {
 		return filter === undefined ? nodes : FilterNodes(nodes, filter);
 	}, [nodes, filter]);
 
-	const flatStories = useMemo(() => {
-		return FlattenStories(filteredNodes);
-	}, [filteredNodes]);
-
 	const MoveToStory = useCallback(
 		(delta: number) => {
+			const flatStories = FlattenStories(filteredNodes);
 			if (flatStories.size() === 0) return;
 
 			const currentModule = rootStory?.Module;
@@ -71,7 +68,7 @@ function StoryTree(props: StoryTreeProps) {
 
 			mountStory(flatStories[nextIndex].Module, keepViewOnViewport);
 		},
-		[flatStories, rootStory, keepViewOnViewport]
+		[filteredNodes, rootStory, keepViewOnViewport]
 	);
 
 	useEffect(() => {
@@ -102,7 +99,7 @@ function StoryTree(props: StoryTreeProps) {
 			});
 			if (unknownSize > 0) {
 				elementsList.push(
-					<Div Size={new UDim2(1, 0, 0, 8)} LayoutOrder={booksSize}>
+					<Div key={"2-Divisor"} Size={new UDim2(1, 0, 0, 8)} LayoutOrder={booksSize}>
 						<Divisor Direction="X" Size={new UDim(1, -25)} Transparency={0.9} />
 					</Div>
 				);

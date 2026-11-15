@@ -15,17 +15,24 @@ export function FlattenStories(nodes: RootNodes): StoryNode[] {
 	for (const storybook of nodes.storybooks) {
 		flattenChildren(storybook.Children, result);
 	}
-	for (const unknown of nodes.unknown) {
-		for (const story of unknown.Children) {
-			result.push(story);
-		}
+	for (const unknown of [...nodes.unknown].sort((a, b) => a.Instance.Name < b.Instance.Name)) {
+		flattenChildren(unknown.Children, result);
 	}
 
 	return result;
 }
 
 function flattenChildren(children: ChildrenNode[], result: StoryNode[]) {
-	for (const child of children) {
+	const orderedChildren = [...children].sort((a, b) => {
+		const aIsFolder = "Children" in a;
+		const bIsFolder = "Children" in b;
+		if (aIsFolder !== bIsFolder) return aIsFolder;
+		const aName = "Children" in a ? a.Instance.Name : a.Name;
+		const bName = "Children" in b ? b.Instance.Name : b.Name;
+		return aName < bName;
+	});
+
+	for (const child of orderedChildren) {
 		if ("Children" in child) {
 			flattenChildren(child.Children, result);
 		} else {
