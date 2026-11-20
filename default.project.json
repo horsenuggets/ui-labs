@@ -1,8 +1,14 @@
 {
 	"name": "ui-labs-plugin",
-	"globIgnorePaths": ["**/package.json", "**/tsconfig.json"],
+	"globIgnorePaths": ["**/package.json", "**/tsconfig.json", "out/UILabs.server.luau"],
 	"tree": {
 		"$path": "out",
+		"UILabs": {
+			"$path": "out/UILabs.server.luau",
+			"$properties": {
+				"RunContext": "Plugin"
+			}
+		},
 		"include": {
 			"$path": "include",
 			"node_modules": {
