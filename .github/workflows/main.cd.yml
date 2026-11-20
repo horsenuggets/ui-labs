@@ -53,14 +53,14 @@ jobs:
         run: node scripts/release-version.mjs "$RELEASE_VERSION" >> "$GITHUB_OUTPUT"
       - name: Check release formatting
         run: pnpm exec prettier --check .github/workflows/main.cd.yml scripts/release-version.mjs tests/ReleaseVersion.test.mjs
-      - name: Run regression tests
-        run: pnpm test
-      - name: Lint source
-        run: pnpm run lint
       - name: Set up declared Roblox tools
         uses: CompeyDev/setup-rokit@1d9390883f7ebce19d48f5b8d006e11d387c92ab # v0.2.1
         with:
           version: v1.2.0
+      - name: Run regression tests
+        run: pnpm test
+      - name: Lint source
+        run: pnpm run lint
       - name: Build the plugin
         run: pnpm run build:rbxm
       - name: Upload the plugin artifact

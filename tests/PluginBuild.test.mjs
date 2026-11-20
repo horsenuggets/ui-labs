@@ -23,6 +23,15 @@ test("The plugin entry overrides the server suffix without replacing compiled ou
 	assert.ok(project.globIgnorePaths.includes(project.tree.UILabs.$path));
 });
 
+test("The release workflow installs declared Roblox tools before running regression tests", () => {
+	const workflow = readFileSync(new URL("../.github/workflows/main.cd.yml", import.meta.url), "utf8");
+	const setup = workflow.indexOf("- name: Set up declared Roblox tools");
+	const regression = workflow.indexOf("run: pnpm test");
+	assert.ok(setup >= 0, "The release workflow must install the declared Roblox tools.");
+	assert.ok(regression >= 0, "The release workflow must run the regression tests.");
+	assert.ok(setup < regression, "The declared Roblox tools must be installed before the regression tests run.");
+});
+
 test(
 	"The standard binary plugin build preserves the UILabs plugin run context",
 	{ skip: rojoVersion.error?.code === "ENOENT" ? "Install the declared Rojo tool with rokit install." : false },
