@@ -19,3 +19,7 @@ UILabs.rbxm
 .terraform/
 *.tfstate
 *.tfstate.*
+
+# Worktrees
+/.worktrees/
+/.wt/

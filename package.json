@@ -4,6 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"private": true,
+	"type": "module",
 	"packageManager": "pnpm@9.15.9",
 	"scripts": {
 		"build": "rbxtsc",
